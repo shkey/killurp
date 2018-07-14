@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import requests
 import prettytable
 import login
 from bs4 import BeautifulSoup
 
-def get_qbinfo(choice_url):
-    score_html = student.sess.get(choice_url)
+def get_qbinfo(choice_html):
     # 将得到的教务系统的源码转换成BeautifulSoup对象，并指定解析器为lxml
-    soup = BeautifulSoup(score_html.text, "lxml")
+    soup = BeautifulSoup(choice_html.text, "lxml")
     # 通过css选择器选出要用的数据
     score_tables = soup.select("#user > tr > td")
     pt_score = prettytable.PrettyTable(["课程号", "课程名", "学分", "课程属性", "成绩"])
@@ -22,10 +22,9 @@ def get_qbinfo(choice_url):
         pt_score.add_row([course_id, course_name, course_num, course_type, course_score])
     print(pt_score)
 
-def get_sxinfo(choice_url):
-    score_html = student.sess.get(choice_url)
+def get_sxinfo(choice_html):
     # 将得到的教务系统的源码转换成BeautifulSoup对象，并指定解析器为lxml
-    soup = BeautifulSoup(score_html.text, "lxml")
+    soup = BeautifulSoup(choice_html.text, "lxml")
     # 通过css选择器选出要用的数据
     score_tables = soup.select("#user > tr > td")
     pt_score = prettytable.PrettyTable(["课程号", "课程名", "学分", "课程属性", "成绩"])
@@ -40,10 +39,9 @@ def get_sxinfo(choice_url):
         pt_score.add_row([course_id, course_name, course_num, course_type, course_score])
     print(pt_score)
 
-def get_fainfo(choice_url):
-    score_html = student.sess.get(choice_url)
+def get_fainfo(choice_html):
     # 将得到的教务系统的源码转换成BeautifulSoup对象，并指定解析器为lxml
-    soup = BeautifulSoup(score_html.text, "lxml")
+    soup = BeautifulSoup(choice_html.text, "lxml")
     # 通过css选择器选出要用的数据
     score_tables = soup.select("#user > tr > td")
     pt_score = prettytable.PrettyTable(["课程号", "课程名", "学分", "课程属性", "成绩"])
@@ -58,10 +56,9 @@ def get_fainfo(choice_url):
         pt_score.add_row([course_id, course_name, course_num, course_type, course_score])
     print(pt_score)
 
-def get_bjg(choice_url):
-    score_html = student.sess.get(choice_url)
+def get_bjg(choice_html):
     # 将得到的教务系统的源码转换成BeautifulSoup对象，并指定解析器为lxml
-    soup = BeautifulSoup(score_html.text, "lxml")
+    soup = BeautifulSoup(choice_html.text, "lxml")
     # 通过css选择器选出要用的数据
     score_tables = soup.select("#user > tr > td")
     pt_score = prettytable.PrettyTable(["课程号", "课程名", "学分", "课程属性", "成绩", "考试时间"])
@@ -92,13 +89,17 @@ def main(student):
     print(pt)
     choice = int(input("请输入你要进行的查询类型：")) - 1
     if choice == 0:
-        get_qbinfo(score_urls[choice])
+        score_html = student.sess.get(score_urls[choice])
+        get_qbinfo(score_html)
     elif choice == 1:
-        get_sxinfo(score_urls[choice])
+        score_html = student.sess.get(score_urls[choice])
+        get_sxinfo(score_html)
     elif choice == 2:
-        get_fainfo(score_urls[choice])
+        score_html = student.sess.get(score_urls[choice])
+        get_fainfo(score_html)
     elif choice == 3:
-        get_bjg(score_urls[choice])
+        score_html = student.sess.get(score_urls[choice])
+        get_bjg(score_html)
     else:
         print("你的输入有误，请重新运行本程序再次进行输入！")
         return 0
