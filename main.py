@@ -16,12 +16,12 @@ def main():
     pt.add_row(["2、一键评教"])
     pt.add_row(["3、四六级查询"])
     print(pt)
-    choice = int(input("请输入你要进行的操作类型：")) - 1
-    if choice == 0:
+    choice = int(input("请输入你要进行的操作类型："))
+    if choice == 1:
         score.main(student)
-    elif choice == 1:
-        judge.judge_all(student)
     elif choice == 2:
+        judge.judge_all(student)
+    elif choice == 3:
         cet.main()
     else:
         print("你的输入有误，请重新运行本程序再次进行输入！")
