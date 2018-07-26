@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+import os
+
 import requests
+
+import configloader
 
 urp_index_url = "http://newjw.cduestc.cn"
 urp_login_url = "http://newjw.cduestc.cn/loginAction.do"
@@ -13,8 +18,14 @@ class Student(object):
         self.requests = requests
         # 创建Requests session
         self.sess = requests.Session()
-        self.account = input("请输入你的学号：").strip()
-        self.password = input("请输入你的密码：").strip()
+        if os.path.exists("config.ini"):
+            user = configloader.load_user()
+            self.account = user["account"]
+            self.password = user["password"]
+        else:
+            self.account = input("请输入你的学号：").strip()
+            self.password = input("请输入你的密码：").strip()
+            configloader.init_user(self.account, self.password)
 
     def login(self):
         # 构造form表单内容
