@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os
 import configparser
+import os
 
 
 def init_user(account, password):
@@ -20,6 +20,21 @@ def load_user():
     user["account"] = config.get("user", "account")
     user["password"] = config.get("user", "password")
     return user
+
+def set_status(code):
+    config = configparser.ConfigParser()
+    config.read("config.ini")
+    if "status" not in config:
+        config.add_section("status")
+    config.set("status", "code", code)
+    with open("config.ini", "w") as configfile:
+        config.write(configfile)
+
+def get_status():
+    config = configparser.ConfigParser()
+    config.read("config.ini")
+    code = config.get("status", "code")
+    return code
 
 def main():
     test = int(input("请输入测试项：1为初始化，2为读取").strip())

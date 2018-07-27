@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
-import requests
 import random
+
+import requests
 from bs4 import BeautifulSoup
-import login
+
+import student
 
 urp_index_url = "http://newjw.cduestc.cn"
 urp_login_url = "http://newjw.cduestc.cn/loginAction.do"
@@ -17,10 +19,10 @@ def get_random_word():
     words_list = ["完全ok", "不错", "可以", "很好", "还行"]
     return words_list[random.randint(0, 4)]
 
-def judge_all(student):
+def judge_all(stu):
     print("程序运行中，请稍等……")
-    main_jsp = student.sess.get(urp_main_url)
-    jxpg_jsp = student.sess.get(urp_jxpg_list_url)
+    main_jsp = stu.sess.get(urp_main_url)
+    jxpg_jsp = stu.sess.get(urp_jxpg_list_url)
     soup = BeautifulSoup(jxpg_jsp.text, 'lxml')
     # 匹配出需要评教的列表
     course_info_list = soup.select('tr.odd > td > img')
@@ -44,7 +46,7 @@ def judge_all(student):
             "pageNo":""
         }
         # 请求具体科目评教页面，目的是完全模拟浏览器行为
-        jxpg_page = student.sess.post(urp_jxpg_url, data=querystring)
+        jxpg_page = stu.sess.post(urp_jxpg_url, data=querystring)
         # 构造评教数据表单
         querystring = {
             "wjbm":c_info[0],
@@ -70,13 +72,13 @@ def judge_all(student):
             "zgpj":get_random_word().encode('gb2312')
         }
         # 提交评教数据
-        jxpg_submit = student.sess.post(urp_jxpg_page_url, data=querystring)
+        jxpg_submit = stu.sess.post(urp_jxpg_page_url, data=querystring)
         # 若科目评教成功则打印成功信息
         if jxpg_submit.status_code == requests.codes.get('ok'):
             print(c_info[4],"评教完成")
     print("程序自动评教完成，请注意自行检查是否真的评教完成～\n如果没有完成评教，请检查是否输错学号或密码后重试！")
 
 if __name__ == "__main__":
-    student = login.Student()
-    student.login()
-    judge_all(student)
+    stu = student.Student("123", "test")
+    stu.login()
+    judge_all(stu)

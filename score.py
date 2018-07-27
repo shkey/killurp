@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import requests
 import prettytable
-import login
+import requests
 from bs4 import BeautifulSoup
+
+import student
+
 
 def get_qbinfo(choice_html):
     # 将得到的教务系统的源码转换成BeautifulSoup对象，并指定解析器为lxml
@@ -74,7 +76,7 @@ def get_bjg(choice_html):
         pt_score.add_row([course_id, course_name, course_num, course_type, course_score, course_time])
     print(pt_score)
 
-def main(student):
+def main(stu):
     # 构造一个列表，用来存放查询成绩的类型
     score_urls = [
         "http://newjw.cduestc.cn/gradeLnAllAction.do?type=ln&oper=qbinfo", "http://newjw.cduestc.cn/gradeLnAllAction.do?type=ln&oper=sxinfo", "http://newjw.cduestc.cn/gradeLnAllAction.do?type=ln&oper=fainfo", "http://newjw.cduestc.cn/gradeLnAllAction.do?type=ln&oper=bjg"
@@ -87,24 +89,24 @@ def main(student):
     pt.add_row(["3、按方案成绩查询"])
     pt.add_row(["4、不及格成绩查询"])
     print(pt)
-    choice = int(input("请输入你要进行的查询类型：")) - 1
-    if choice == 0:
-        score_html = student.sess.get(score_urls[choice])
+    choice = int(input("请输入你要进行的查询类型：").strip())
+    if choice == 1:
+        score_html = stu.sess.get(score_urls[choice - 1])
         get_qbinfo(score_html)
-    elif choice == 1:
-        score_html = student.sess.get(score_urls[choice])
-        get_sxinfo(score_html)
     elif choice == 2:
-        score_html = student.sess.get(score_urls[choice])
-        get_fainfo(score_html)
+        score_html = stu.sess.get(score_urls[choice - 1])
+        get_sxinfo(score_html)
     elif choice == 3:
-        score_html = student.sess.get(score_urls[choice])
+        score_html = stu.sess.get(score_urls[choice - 1])
+        get_fainfo(score_html)
+    elif choice == 4:
+        score_html = stu.sess.get(score_urls[choice - 1])
         get_bjg(score_html)
     else:
         print("你的输入有误，请重新运行本程序再次进行输入！")
         return 0
 
 if __name__ == "__main__":
-    student = login.Student()
-    student.login()
-    main(student)
+    stu = student.Student("123", "test")
+    stu.login()
+    main(stu)

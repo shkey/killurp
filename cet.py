@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import requests
+from io import BytesIO
+
 import prettytable
+import requests
 from bs4 import BeautifulSoup
 from PIL import Image
-from io import BytesIO
+
 
 def main():
     zkzh = input("请输入15位笔试或口试准考证号：").strip()
