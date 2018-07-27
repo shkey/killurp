@@ -27,7 +27,6 @@ def main():
         configloader.init_user(account, password)
     stu = student.Student(account, password)
     response_status = stu.login()
-    print(response_status)
     if not response_status:
         configloader.set_status("0")
         print("账号或密码有误，请重试！")
