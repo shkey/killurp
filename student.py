@@ -2,12 +2,14 @@
 # -*- coding: utf-8 -*-
 import requests
 
+
 urp_index_url = "http://newjw.cduestc.cn"
 urp_login_url = "http://newjw.cduestc.cn/loginAction.do"
 urp_main_url = "http://newjw.cduestc.cn/menu/s_main.jsp"
 urp_jxpg_list_url = "http://newjw.cduestc.cn/jxpgXsAction.do?oper=listWj"
 urp_jxpg_url = "http://newjw.cduestc.cn/jxpgXsAction.do"
 urp_jxpg_page_url = "http://newjw.cduestc.cn/jxpgXsAction.do?oper=wjpg"
+
 
 class Student(object):
     def __init__(self, account, password):
@@ -37,5 +39,4 @@ class Student(object):
             return False
         elif "你输入的证件号不存在，请您重新输入！" in response.text:
             return False
-        else:
-            return True
+        return True

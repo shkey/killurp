@@ -24,6 +24,7 @@ def get_qbinfo(choice_html):
         pt_score.add_row([course_id, course_name, course_num, course_type, course_score])
     print(pt_score)
 
+
 def get_sxinfo(choice_html):
     # 将得到的教务系统的源码转换成BeautifulSoup对象，并指定解析器为lxml
     soup = BeautifulSoup(choice_html.text, "lxml")
@@ -40,6 +41,7 @@ def get_sxinfo(choice_html):
         course_score = score_tables[i + 6].get_text().strip()
         pt_score.add_row([course_id, course_name, course_num, course_type, course_score])
     print(pt_score)
+
 
 def get_fainfo(choice_html):
     # 将得到的教务系统的源码转换成BeautifulSoup对象，并指定解析器为lxml
@@ -58,6 +60,7 @@ def get_fainfo(choice_html):
         pt_score.add_row([course_id, course_name, course_num, course_type, course_score])
     print(pt_score)
 
+
 def get_bjg(choice_html):
     # 将得到的教务系统的源码转换成BeautifulSoup对象，并指定解析器为lxml
     soup = BeautifulSoup(choice_html.text, "lxml")
@@ -75,6 +78,7 @@ def get_bjg(choice_html):
         course_time = score_tables[i + 7].get_text().strip()
         pt_score.add_row([course_id, course_name, course_num, course_type, course_score, course_time])
     print(pt_score)
+
 
 def main(stu):
     # 构造一个列表，用来存放查询成绩的类型
@@ -110,6 +114,7 @@ def main(stu):
     else:
         print("你的输入有误，请重新运行本程序再次进行输入！")
         return 0
+
 
 if __name__ == "__main__":
     stu = student.Student("123", "test")

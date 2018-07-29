@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 
 import student
 
+
 urp_index_url = "http://newjw.cduestc.cn"
 urp_login_url = "http://newjw.cduestc.cn/loginAction.do"
 urp_main_url = "http://newjw.cduestc.cn/menu/s_main.jsp"
@@ -14,10 +15,12 @@ urp_jxpg_list_url = "http://newjw.cduestc.cn/jxpgXsAction.do?oper=listWj"
 urp_jxpg_url = "http://newjw.cduestc.cn/jxpgXsAction.do"
 urp_jxpg_page_url = "http://newjw.cduestc.cn/jxpgXsAction.do?oper=wjpg"
 
+
 def get_random_word():
     # 可以修改下面的列表内容为你想填写的主观评价
     words_list = ["完全ok", "不错", "可以", "很好", "还行"]
     return words_list[random.randint(0, 4)]
+
 
 def judge_all(stu):
     print("程序运行中，请稍等……")
@@ -76,7 +79,8 @@ def judge_all(stu):
         # 若科目评教成功则打印成功信息
         if jxpg_submit.status_code == requests.codes.get('ok'):
             print(c_info[4],"评教完成")
-    print("程序自动评教完成，请注意自行检查是否真的评教完成～\n如果没有完成评教，请检查是否输错学号或密码后重试！")
+    print("程序自动评教完成，请注意自行检查是否真的评教完成～\r\n如果没有完成评教，请检查是否输错学号或密码后重试！")
+
 
 if __name__ == "__main__":
     stu = student.Student("123", "test")

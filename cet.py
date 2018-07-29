@@ -7,16 +7,39 @@ import requests
 from bs4 import BeautifulSoup
 from PIL import Image
 
+import configloader
 
-def main():
-    zkzh = input("请输入15位笔试或口试准考证号：").strip()
-    xm = input("请输入你的姓名：").strip()
+
+def main(cl):
+    pre_code = cl.get_cet_status()
+    if pre_code == "1" or pre_code == "2":
+        zkzh, xm = cl.get_cet()
+    else:
+        zkzh = input("请输入你的准考证号：").strip()
+        xm = input("请输入你的姓名：").strip()
+        cl.set_cet(zkzh, xm)
     sess = requests.Session()
+    response_status = cet_login(sess, zkzh, xm)
+    if not response_status:
+        if pre_code == "1" or pre_code == "2":
+            cl.set_cet_status("2")
+            print("验证码输入有误，请重试！")
+            return 0
+        cl.set_cet_status("0")
+        print("账号或密码有误，请重试！")
+        return 0
+    else:
+        print("查询成功！")
+        cl.set_cet_status("1")
+
+
+def cet_login(sess, zkzh, xm):
     main_url = sess.get("https://www.chsi.com.cn/cet/")
     img = sess.get("https://www.chsi.com.cn/cet/ValidatorIMG.JPG")
     im = Image.open(BytesIO(img.content))
     im.show()
     yzm = input("请输入验证码：").strip()
+    print("查询中，请稍等……\r")
     headers = {
         "Referer": "https://www.chsi.com.cn/cet/", 
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36"
@@ -40,8 +63,14 @@ def main():
         pt.add_row(["口试准考证号：{}".format(pt_items[11].get_text().strip())])
         pt.add_row(["口试等级：{}".format(pt_items[12].get_text().strip())])
         print(pt)
+        if "验证码不正确" in score_html.text:
+            return False
+        return True
     except:
         print("sorry，出了点小问题，请重试！")
+        return 0
+
 
 if __name__ == "__main__":
-    main()
+    cl = configloader.Configloader()
+    main(cl)
