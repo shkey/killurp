@@ -22,6 +22,7 @@ def get_qbinfo(choice_html):
         course_type = score_tables[i + 5].get_text().strip()
         course_score = score_tables[i + 6].get_text().strip()
         pt_score.add_row([course_id, course_name, course_num, course_type, course_score])
+    print("全部成绩")
     print(pt_score)
 
 
@@ -40,6 +41,7 @@ def get_sxinfo(choice_html):
         course_type = score_tables[i + 5].get_text().strip()
         course_score = score_tables[i + 6].get_text().strip()
         pt_score.add_row([course_id, course_name, course_num, course_type, course_score])
+    print("课程属性成绩")
     print(pt_score)
 
 
@@ -58,6 +60,7 @@ def get_fainfo(choice_html):
         course_type = score_tables[i + 5].get_text().strip()
         course_score = score_tables[i + 6].get_text().strip()
         pt_score.add_row([course_id, course_name, course_num, course_type, course_score])
+    print("方案成绩")
     print(pt_score)
 
 
@@ -77,6 +80,7 @@ def get_bjg(choice_html):
         course_score = score_tables[i + 6].get_text().strip()
         course_time = score_tables[i + 7].get_text().strip()
         pt_score.add_row([course_id, course_name, course_num, course_type, course_score, course_time])
+    print("不及格成绩")
     print(pt_score)
 
 
@@ -88,12 +92,12 @@ def main(stu):
     pt = prettytable.PrettyTable(["查询类型"])
     # 设置prettytable靠左对齐
     pt.align = "l"
-    pt.add_row(["1、全部及格成绩查询"])
-    pt.add_row(["2、按课程属性成绩查询"])
-    pt.add_row(["3、按方案成绩查询"])
+    pt.add_row(["1、全部成绩查询"])
+    pt.add_row(["2、课程属性成绩查询"])
+    pt.add_row(["3、方案成绩查询"])
     pt.add_row(["4、不及格成绩查询"])
     print(pt)
-    choice = input("请输入你要进行的操作类型：").strip()
+    choice = input("请按序号输入你要进行的操作\r\n# ").strip()
     if choice.isdigit():
         choice = int(choice)
         if choice == 1:
@@ -108,11 +112,9 @@ def main(stu):
         elif choice == 4:
             score_html = stu.sess.get(score_urls[choice - 1])
             get_bjg(score_html)
-        else:
-            print("你的输入有误，请重新运行本程序再次进行输入！")
-            return 0
+        print("成绩查询完成，已为你回退到主菜单")
     else:
-        print("你的输入有误，请重新运行本程序再次进行输入！")
+        print("你的输入有误，已为你回退到主菜单")
         return 0
 
 
