@@ -21,7 +21,7 @@ def load_user():
     user["password"] = config.get("user", "password")
     return user
 
-def set_status(code):
+def set_urp_status(code):
     config = configparser.ConfigParser()
     config.read("config.ini")
     if "status" not in config:
@@ -30,7 +30,7 @@ def set_status(code):
     with open("config.ini", "w") as configfile:
         config.write(configfile)
 
-def get_status():
+def get_urp_status():
     config = configparser.ConfigParser()
     config.read("config.ini")
     code = config.get("status", "code")

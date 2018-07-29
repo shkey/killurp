@@ -89,19 +89,24 @@ def main(stu):
     pt.add_row(["3、按方案成绩查询"])
     pt.add_row(["4、不及格成绩查询"])
     print(pt)
-    choice = int(input("请输入你要进行的查询类型：").strip())
-    if choice == 1:
-        score_html = stu.sess.get(score_urls[choice - 1])
-        get_qbinfo(score_html)
-    elif choice == 2:
-        score_html = stu.sess.get(score_urls[choice - 1])
-        get_sxinfo(score_html)
-    elif choice == 3:
-        score_html = stu.sess.get(score_urls[choice - 1])
-        get_fainfo(score_html)
-    elif choice == 4:
-        score_html = stu.sess.get(score_urls[choice - 1])
-        get_bjg(score_html)
+    choice = input("请输入你要进行的操作类型：").strip()
+    if choice.isdigit():
+        choice = int(choice)
+        if choice == 1:
+            score_html = stu.sess.get(score_urls[choice - 1])
+            get_qbinfo(score_html)
+        elif choice == 2:
+            score_html = stu.sess.get(score_urls[choice - 1])
+            get_sxinfo(score_html)
+        elif choice == 3:
+            score_html = stu.sess.get(score_urls[choice - 1])
+            get_fainfo(score_html)
+        elif choice == 4:
+            score_html = stu.sess.get(score_urls[choice - 1])
+            get_bjg(score_html)
+        else:
+            print("你的输入有误，请重新运行本程序再次进行输入！")
+            return 0
     else:
         print("你的输入有误，请重新运行本程序再次进行输入！")
         return 0
