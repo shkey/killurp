@@ -97,25 +97,28 @@ def main(stu):
     pt.add_row(["3、方案成绩查询"])
     pt.add_row(["4、不及格成绩查询"])
     print(pt)
-    choice = input("请按序号输入你要进行的操作\r\n# ").strip()
-    if choice.isdigit():
-        choice = int(choice)
-        if choice == 1:
-            score_html = stu.sess.get(score_urls[choice - 1])
-            get_qbinfo(score_html)
-        elif choice == 2:
-            score_html = stu.sess.get(score_urls[choice - 1])
-            get_sxinfo(score_html)
-        elif choice == 3:
-            score_html = stu.sess.get(score_urls[choice - 1])
-            get_fainfo(score_html)
-        elif choice == 4:
-            score_html = stu.sess.get(score_urls[choice - 1])
-            get_bjg(score_html)
-        print("成绩查询完成，已为你回退到主菜单")
-    else:
-        print("你的输入有误，已为你回退到主菜单")
-        return 0
+    try:
+        choice = input("请按序号输入你要进行的操作\r\n# ").strip()
+        if choice.isdigit():
+            choice = int(choice)
+            if choice == 1:
+                score_html = stu.sess.get(score_urls[choice - 1], timeout=10)
+                get_qbinfo(score_html)
+            elif choice == 2:
+                score_html = stu.sess.get(score_urls[choice - 1], timeout=10)
+                get_sxinfo(score_html)
+            elif choice == 3:
+                score_html = stu.sess.get(score_urls[choice - 1], timeout=10)
+                get_fainfo(score_html)
+            elif choice == 4:
+                score_html = stu.sess.get(score_urls[choice - 1], timeout=10)
+                get_bjg(score_html)
+            print("成绩查询完成，已为你回退到主菜单")
+        else:
+            print("你的输入有误，已为你回退到主菜单")
+            return 0
+    except:
+        print("遇到了点小问题，请重试")
 
 
 if __name__ == "__main__":

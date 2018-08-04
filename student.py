@@ -20,6 +20,7 @@ class Student(object):
         self.password = password
 
     def login(self):
+        print("登录中，请稍等……\r")
         # 构造form表单内容
         data = {
             "zjh": self.account,
@@ -33,10 +34,12 @@ class Student(object):
             "Referer": "http://newjw.cduestc.cn/",
             "DNT": "1"
         }
-        # 首先发送post请求登录urp系统
-        response = self.sess.post(urp_login_url, data=data, headers=headers)
-        if "您的密码不正确，请您重新输入！" in response.text:
-            return False
-        elif "你输入的证件号不存在，请您重新输入！" in response.text:
-            return False
-        return True
+        try:
+            # 首先发送post请求登录urp系统
+            response = self.sess.post(urp_login_url, data=data, headers=headers, timeout=10)
+            if "您的密码不正确，请您重新输入！" in response.text or "你输入的证件号不存在，请您重新输入！" in response.text:
+                print("账号或密码有误，请重试！")
+                return False
+            return True
+        except:
+            print("遇到了点小问题，请重试！")

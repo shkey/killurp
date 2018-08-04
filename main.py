@@ -25,11 +25,9 @@ def main():
         password = input("请输入你的密码：").strip()
         cl.init_user(account, password)
     stu = student.Student(account, password)
-    print("登录中，请稍等……\r")
     response_status = stu.login()
     if not response_status:
         cl.set_urp_status("0")
-        print("账号或密码有误，请重试！")
         return 0
     else:
         print("登录成功！")
