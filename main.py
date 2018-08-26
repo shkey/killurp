@@ -49,6 +49,9 @@ def main():
                     judge.judge_all(stu)
                 elif choice == 3:
                     cet.main(cl)
+                else:
+                    print("你选择退出程序，好的，再见。")
+                    return 0
             else:
                 print("你选择退出程序，好的，再见。")
                 return 0

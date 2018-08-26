@@ -111,6 +111,6 @@ venv.bak/
 .venv/
 
 config.ini
-
+.vscode
 # End of https://www.gitignore.io/api/python
 
