@@ -110,7 +110,7 @@ venv.bak/
 ### Python Patch ###
 .venv/
 
-config.ini
+config.yml
 .vscode
 # End of https://www.gitignore.io/api/python
 

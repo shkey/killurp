@@ -10,7 +10,6 @@ urp_jxpg_list_url = "http://newjw.cduestc.cn/jxpgXsAction.do?oper=listWj"
 urp_jxpg_url = "http://newjw.cduestc.cn/jxpgXsAction.do"
 urp_jxpg_page_url = "http://newjw.cduestc.cn/jxpgXsAction.do?oper=wjpg"
 
-
 class Student(object):
     def __init__(self, account, password):
         self.requests = requests

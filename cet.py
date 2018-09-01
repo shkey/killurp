@@ -4,33 +4,9 @@ from io import BytesIO
 
 import prettytable
 import requests
+import yaml
 from bs4 import BeautifulSoup
 from PIL import Image
-
-import configloader
-
-
-def main(cl):
-    pre_code = cl.get_cet_status()
-    if pre_code == "1" or pre_code == "2":
-        zkzh, xm = cl.get_cet()
-    else:
-        zkzh = input("请输入你的准考证号：").strip()
-        xm = input("请输入你的姓名：").strip()
-        cl.set_cet(zkzh, xm)
-    sess = requests.Session()
-    response_status = cet_login(sess, zkzh, xm)
-    if not response_status:
-        if pre_code == "1" or pre_code == "2":
-            cl.set_cet_status("2")
-            print("验证码输入有误，请重试！")
-            return 0
-        cl.set_cet_status("0")
-        print("账号或密码有误，请重试！")
-        return 0
-    else:
-        print("查询成功！")
-        cl.set_cet_status("1")
 
 
 def cet_login(sess, zkzh, xm):
@@ -70,7 +46,32 @@ def cet_login(sess, zkzh, xm):
         print("sorry，出了点小问题，请重试！")
         return 0
 
+def main(cy):
+    pre_code = cy["status"]["cet_code"]
+    if pre_code:
+        zkzh = cy["cet"]["zkzh"]
+        xm = cy["cet"]["xm"]
+    else:
+        zkzh = input("请输入你的准考证号：")
+        xm = input("请输入你的姓名：")
+        cy["cet"]["zkzh"] = zkzh
+        cy["cet"]["xm"] = xm
+    sess = requests.Session()
+    response_status = cet_login(sess, zkzh, xm)
+    if not response_status:
+        if pre_code:
+            cy["status"]["cet_code"] = 2
+            print("验证码输入有误，请重试！")
+            return 0
+        cy["status"]["cet_code"] = 0
+        print("账号或密码有误，请重试！")
+        return 0
+    else:
+        print("查询成功！")
+        cy["status"]["cet_code"] = 1
+
 
 if __name__ == "__main__":
-    cl = configloader.Configloader()
-    main(cl)
+    with open("config.yml", "r", encoding="utf-8") as cfg:
+        cy = yaml.load(cfg)
+        main(cy)

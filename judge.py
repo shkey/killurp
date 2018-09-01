@@ -15,12 +15,10 @@ urp_jxpg_list_url = "http://newjw.cduestc.cn/jxpgXsAction.do?oper=listWj"
 urp_jxpg_url = "http://newjw.cduestc.cn/jxpgXsAction.do"
 urp_jxpg_page_url = "http://newjw.cduestc.cn/jxpgXsAction.do?oper=wjpg"
 
-
 def get_random_word():
     # 可以修改下面的列表内容为你想填写的主观评价
     words_list = ["完全ok", "不错", "可以", "很好", "还行"]
     return words_list[random.randint(0, 4)]
-
 
 def judge_all(stu):
     try:
