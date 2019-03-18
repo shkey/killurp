@@ -35,9 +35,7 @@ CET_SCORE = 'query'
 
 def get_parser():
     parser = argparse.ArgumentParser(
-        description='''一个小工具集，将会不断更新各项功能，目的是干掉难用落后反人类的科成 urp
-                        使用方法：
-                        ''',
+        description='一个小工具集，将会不断更新各项功能，目的是干掉难用落后反人类的科成 urp',
         epilog='有问题或者更好的建议？欢迎来 Github[https://github.com/shkey/killurp] 提 issue 和 PR'
     )
     parser.add_argument(
