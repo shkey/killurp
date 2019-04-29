@@ -90,6 +90,6 @@
     成绩报表导出完成，请注意查看
     ```
 
-## LICNESE
+## LICENSE
 
 MIT [@shkey](https://github.com/shkey)
