@@ -3,13 +3,10 @@
 import argparse
 import random
 import sys
-from io import BytesIO
 
-import prettytable
 import requests
 from bs4 import BeautifulSoup
 from openpyxl import Workbook
-from PIL import Image
 
 __VERSION__ = '0.1.0'
 
@@ -27,11 +24,6 @@ URP_JXPG = '/jxpgXsAction.do'
 URP_JXPG_PAGE = '/jxpgXsAction.do?oper=wjpg'
 WORDS = ['完全 ok', '不错', '可以', '很好', '还行']
 
-PROTOCOL_WITH_SSL = 'https://'
-CET_INDEX = 'www.chsi.com.cn/cet/'
-VAL_IMG = 'ValidatorIMG.JPG'
-CET_SCORE = 'query'
-
 
 def get_parser():
     parser = argparse.ArgumentParser(
@@ -42,11 +34,9 @@ def get_parser():
         'choice', type=str,
         help='''选择你要使用的功能项 ->
                 grade：成绩导出，
-                judge：一键评教，
-                cet：四六级查询''',
-        choices=['grade', 'judge', 'cet'])
+                judge：一键评教''',
+        choices=['grade', 'judge'])
     urp_group = parser.add_argument_group(title='URP options')
-    cet_group = parser.add_argument_group(title='CET options')
     urp_group.add_argument(
         '-a', '--account', type=str,
         help='你的 URP 账号（也就是学号）'
@@ -58,14 +48,6 @@ def get_parser():
     urp_group.add_argument(
         '-P', '--port', type=str,
         help='URP 教务系统开放端口（默认为 80 端口）'
-    )
-    cet_group.add_argument(
-        '-z', '--zkzh', type=str,
-        help='你的 CET 准考证号'
-    )
-    cet_group.add_argument(
-        '-n', '--name', type=str,
-        help='你的姓名'
     )
     parser.add_argument('-v', '--version',
                         action='version', version=__VERSION__)
@@ -274,48 +256,6 @@ def judge_all(account, password, port=PORT):
             print('遇到了点小问题，请重试！')
 
 
-def get_cet_score(zkzh, xm):
-    cet_index_url = PROTOCOL_WITH_SSL + CET_INDEX
-    try:
-        sess = requests.Session()
-        main_url = sess.get(cet_index_url)
-        img = sess.get(cet_index_url + VAL_IMG)
-        im = Image.open(BytesIO(img.content))
-        im.show()
-        yzm = input('请输入验证码：').strip()
-        print('查询中，请稍等...')
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36',
-            'Referer': cet_index_url
-        }
-        payload = {'zkzh': zkzh, 'xm': xm, 'yzm': yzm}
-        score_html = sess.get(cet_index_url + CET_SCORE,
-                              params=payload, headers=headers)
-        soup = BeautifulSoup(score_html.text, 'lxml')
-        pt_title = soup.select('#leftH > h2')
-        pt_items = soup.select('#leftH > div > table > tr > td')
-        pt = prettytable.PrettyTable([pt_title[0].get_text()])
-        pt.align = 'l'
-        pt.add_row(['姓名：{}'.format(pt_items[0].get_text().strip())])
-        pt.add_row(['学校：{}'.format(pt_items[1].get_text().strip())])
-        pt.add_row(['考试级别：{}'.format(pt_items[2].get_text().strip())])
-        pt.add_row(['笔试准考证号：{}'.format(pt_items[3].get_text().strip())])
-        pt.add_row(['笔试成绩总分：{}'.format(pt_items[4].get_text().strip())])
-        pt.add_row(['听力：{}'.format(pt_items[6].get_text().strip())])
-        pt.add_row(['阅读：{}'.format(pt_items[8].get_text().strip())])
-        pt.add_row(['写作和翻译：{}'.format(pt_items[10].get_text().strip())])
-        pt.add_row(['口试准考证号：{}'.format(pt_items[11].get_text().strip())])
-        pt.add_row(['口试等级：{}'.format(pt_items[12].get_text().strip())])
-        print(pt)
-        if '请输入验证码' in score_html.text:
-            print('请输入验证码！')
-        if '验证码不正确' in score_html.text:
-            print('验证码不正确，请重试！')
-    except Exception as e:
-        print('Exception:', e)
-        print('sorry，出了点小问题，请重试！')
-
-
 def cli():
     parser = get_parser()
     args = vars(parser.parse_args())
@@ -323,8 +263,6 @@ def cli():
     account = args.get('account', None)
     password = args.get('password', None)
     port = args.get('port', PORT)
-    zkzh = args.get('zkzh', None)
-    name = args.get('name', None)
     if choice == 'grade':
         if not account:
             account = input('请输入你的账号：').strip()
@@ -346,17 +284,6 @@ def cli():
         else:
             parser.print_help()
             print('ERROR：使用 URP 教务系统功能请同时输入账号及密码！')
-            sys.exit()
-    elif choice == 'cet':
-        if not zkzh:
-            zkzh = input('请输入 15 位笔试或口试准考证号：').strip()
-        if not name:
-            name = input('请输入你的姓名（姓名超过 3 个字，可只输入前 3 个）：').strip()
-        if zkzh and name:
-            get_cet_score(zkzh, name)
-        else:
-            parser.print_help()
-            print('ERROR：使用 CET 功能请同时输入你的准考证号及姓名！')
             sys.exit()
 
 
