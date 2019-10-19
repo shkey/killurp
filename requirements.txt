@@ -1,6 +1,5 @@
+bullet
 bs4
 lxml
-Pillow
-prettytable
-requests
 openpyxl
+requests
